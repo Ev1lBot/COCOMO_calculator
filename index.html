@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>COCOMO Калькулятор</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background: #f9f9f9;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    select, input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background: #0078D7;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background: #005a9e;
+    }
+    .result {
+      margin-top: 15px;
+      padding: 10px;
+      background: #eef;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>COCOMO Model: Basic</h2>
+    
+    <label for="projectType">Тип проєкту:</label>
+    <select id="projectType">
+      <option value="Organic">Organic</option>
+      <option value="Semi-Detached">Semi-Detached</option>
+      <option value="Embedded">Embedded</option>
+    </select>
+    
+    <label for="kloc">Кількість рядків коду (тис.):</label>
+    <input type="number" id="kloc" placeholder="Напр. 10">
+    
+    <button onclick="calculate()">Розрахувати!</button>
+    
+    <div class="result" id="result">
+      <p><strong>Трудоємність:</strong> -</p>
+      <p><strong>Тривалість:</strong> -</p>
+      <p><strong>Розробників:</strong> -</p>
+    </div>
+  </div>
+  
+  <script>
+    const cocomoParams = {
+      "Organic": [2.4, 1.05, 2.5, 0.38],
+      "Semi-Detached": [3.0, 1.12, 2.5, 0.35],
+      "Embedded": [3.6, 1.20, 2.5, 0.32]
+    };
+
+    function calculate() {
+      const projectType = document.getElementById("projectType").value;
+      const kloc = parseFloat(document.getElementById("kloc").value);
+
+      if (isNaN(kloc) || kloc <= 0) {
+        alert("Будь ласка, введіть коректне число!");
+        return;
+      }
+
+      const [a, b, c, d] = cocomoParams[projectType];
+      
+      const effort = a * Math.pow(kloc, b);     // PM
+      const duration = c * Math.pow(effort, d); // TDEV
+      const devs = effort / duration;           // N
+
+      document.getElementById("result").innerHTML = `
+        <p><strong>Трудоємність:</strong> ${effort.toFixed(2)} людино-місяців</p>
+        <p><strong>Тривалість:</strong> ${duration.toFixed(2)} місяців</p>
+        <p><strong>Розробників:</strong> ${devs.toFixed(2)}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
