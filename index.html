@@ -21,7 +21,7 @@
       margin-top: 10px;
     }
     select, input {
-      width: 80%;
+      width: 2vh;
       padding: 8px;
       margin-top: 5px;
     }
@@ -90,7 +90,7 @@
       
       const effort = a * Math.pow(kloc, b);     // PM
       const duration = c * Math.pow(effort, d); // TDEV
-      const devs = effort / duration;           // N
+      const devs = Math.round(effort / duration);           // N
 
       document.getElementById("result").innerHTML = `
         <p><strong>Трудоємність:</strong> ${effort.toFixed(2)} людино-місяців</p>
